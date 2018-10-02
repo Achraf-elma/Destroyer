@@ -1,0 +1,4 @@
+[0m[[0m[31merror[0m] [0m[0m/home/h/Bureau/Destroyer/src/main/scala/Game.scala:18:7: @tailrec annotated method contains no recursive calls[0m
+[0m[[0m[31merror[0m] [0m[0m  def mainloop(game : GameState): Unit = {[0m
+[0m[[0m[31merror[0m] [0m[0m      ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m

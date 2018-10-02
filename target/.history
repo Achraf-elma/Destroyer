@@ -1,0 +1,7 @@
+sbt
+sbt new sbt/scala-seed.g8
+new sbt/scala-seed.g8
+sbt new scala/scala-seed.g8
+scala/scala-seed.g8
+new scala/scala-seed.g8
+~run
