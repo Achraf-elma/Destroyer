@@ -1,1 +1,27 @@
-[0m[[0m[0mdebug[0m] [0m[0mJar uptodate: /home/h/Bureau/Destroyer/target/scala-2.12/destroyer_2.12-0.1.jar[0m
+[0m[[0m[0minfo[0m] [0m[0mPackaging /home/h/Bureau/Destroyer/target/scala-2.12/destroyer_2.12-0.1.jar ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	scala[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/scala[0m
+[0m[[0m[0mdebug[0m] [0m[0m	scala/Game$delayedInit$body.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/scala/Game$delayedInit$body.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	scala/Ship$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/scala/Ship$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	scala/GameState.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/scala/GameState.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Cell.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/Cell.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	scala/Grid$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/scala/Grid$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	scala/Game$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/scala/Game$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Cell$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/Cell$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	scala/Grid.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/scala/Grid.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	scala/Game.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/scala/Game.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	scala/Ship.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/scala/Ship.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	scala/GameState$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/h/Bureau/Destroyer/target/scala-2.12/classes/scala/GameState$.class[0m
+[0m[[0m[0minfo[0m] [0m[0mDone packaging.[0m

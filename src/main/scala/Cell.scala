@@ -1,6 +1,6 @@
-case Cell(row : Int, column : Int, state : Char)
+case class Cell(row : Int, column : Int, state : Char)
 
 object Cell{
-   def state =
+   def state = "_"
 
 }

@@ -1,7 +1,7 @@
-case class Ship(row : Int, column : Int, size : Int, isVertical : Boolean){
-   var sunk : Boolean
-   var shipCells : Array[Cell](size)
-}
+package scala
+import scala.annotation.tailrec
+
+case class Ship(row : Int, column : Int, size : Int, isVertical : Boolean)
 
 object Ship {
   /**
@@ -15,22 +15,41 @@ object Ship {
   @tailrec
   def checkFreeSpaceAt(row : Int, column : Int, size : Int, isVertical : Boolean, grid : Grid) : Boolean = {
 
-    if(size === 0) {
+    if(size == 0) {
       true
     } else {
-      if(grid.cells(row,column).state === 'o' {
+      if(grid.getCells(row)(column) == '▓') {
         println("Cell already occupied")
         false
       } else {
         isVertical match {
-          case true : checkFreeSpaceAt(row,column+1, size-1, true, grid)
-          case false : checkFreeSpaceAt(row+1,column, size-1, false, grid)
+          case true => checkFreeSpaceAt(row,column+1, size-1, true, grid)
+          case false => checkFreeSpaceAt(row+1,column, size-1, false, grid)
         }
       }
+    }
   }
 
-   @tailrec
-  def placeShipAt(row : Int, column : Int,  isVertical : Boolean, grid : Grid ) : Grid {
+  @tailrec
+  def placeShipAt(row : Int, column : Int, size : Int,  isVertical : Boolean, grid : Grid ) : Grid = {
+
+    var newCells = grid.getCells
+    newCells(row)(column) = '▓'
+
+
+     if(size == 0) {
+       print(newCells.map(_.mkString).mkString("\n"))
+       grid.copy(cells = newCells)
+     } else {
+       isVertical match {
+       case true => placeShipAt(row+1,column, size-1, true, grid)
+       case false => placeShipAt(row,column+1, size-1, false, grid)
+      }
+    }
+
+
+    }
+
+
 
   }
-}
