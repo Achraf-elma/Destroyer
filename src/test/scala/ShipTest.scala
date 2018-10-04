@@ -10,6 +10,4 @@ class ShipTest extends FunSuite with DiagrammedAssertions {
     assert(Ship.checkFreeSpaceAt(0, 0, 3, false, gridPlayer1))
   }
 }
-
-
 **/

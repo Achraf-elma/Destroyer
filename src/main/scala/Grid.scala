@@ -1,13 +1,13 @@
 package scala
 import scala.annotation.tailrec
-import scala.humanPlayer.askIntEntry
+import scala.humanPlayer._
 
 case class Grid(cells : Array[Array[Char]] ) {
 
   def getCells = cells
 
   override def toString: String = {
-    cells.map(_.mkString).mkString("\n")
+    Console.BLUE + getCells.map(_.mkString).mkString("\n") + Console.YELLOW
   }
 
 
@@ -23,7 +23,8 @@ case class Grid(cells : Array[Array[Char]] ) {
   def shootAt(row: Int, column: Int): Grid = {
     var newCells = getCells
     newCells(row)(column) = 'X'
-    print(newCells.map(_.mkString).mkString("\n"))
+    print(this.toString)
+   // print(newCells.map(_.mkString).mkString("\n"))
     this.copy(cells = newCells)
 
   }
@@ -38,9 +39,9 @@ case class Grid(cells : Array[Array[Char]] ) {
     cells(row)(column) match {
       case '▓' => println("\n\nTOUCHED")
         Some((row, column))
-      case '_' => println("\n\nMISSED")
+      case 'o' => println("\n\nMISSED")
         None
-      case 'X' => println("\n\nMISSED")
+      case 'X' => println("\n\nALREADY HIT")
         None
       case _ => println("\n\nMISSED")
         None
@@ -80,10 +81,10 @@ object Grid{
 
   @tailrec
   def askShip(typeShip : TypeShip, grid : Grid) : (Ship, Grid) = {
-    println("Type : " + typeShip.name + " Size : " + typeShip.size)
+    println("Type : " + typeShip.name + " ||| Size : " + typeShip.size)
     var row = askIntEntry("Row")
     var column = askIntEntry("Column")
-    var isVertical =  true
+    var isVertical = askIfVertical()
     var freeSpace = Ship.checkFreeSpaceAt(row, column, typeShip.size, isVertical, grid)
     if (freeSpace) {
       println("PLACE")

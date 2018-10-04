@@ -1,6 +1,7 @@
 package scala
 import scala.annotation.tailrec
 import scala.Grid._
+import scala.GameTools._
 
 case class GameState(
                       var countShipSunk1 : Int,
@@ -16,7 +17,8 @@ object Game extends App {
   def hVhLoop(game : GameState): Unit ={
 
 
-    var gridEmpty = initGrid(10,10)
+    var gridEmpty1 = initGrid(10,10)
+    var gridEmpty2 = initGrid(10,10)
 
 
 
@@ -26,14 +28,24 @@ object Game extends App {
    // var shipsPlayer1 = gridPlayer1.askShips()
     //gridPlayer1 = placeShip(gridPlayer1.askShip(2, "Destroyer"), gridPlayer1)
     // update cells of the grid with the new ships
-    var tupleShipGrid = askShips(Nil,gridEmpty, Ship.typesShip)
+    var tupleShipGrid = askShips(Nil,gridEmpty1, Ship.typesShip)
     var shipsPlayer1 = tupleShipGrid._1
     var gridPlayer1 = tupleShipGrid._2
     var player1 = humanPlayer("Achraf", shipsPlayer1 , Nil, gridPlayer1)
     print(player1.ships)
 
     println("Player Two type your ships's coordinates")
-   // var player2 = humanPlayer("Tom", Grid.askShips() , Nil)
+    var tupleShipGrid2 = askShips(Nil,gridEmpty2, Ship.typesShip)
+    var shipsPlayer2 = tupleShipGrid2._1
+    var gridPlayer2 = tupleShipGrid2._2
+    var player2 = humanPlayer("Tom", shipsPlayer2 , Nil, gridPlayer2)
+    print(player2.ships)
+
+
+    attackPhase(player1, player2)
+
+
+    // var player2 = humanPlayer("Tom", Grid.askShips() , Nil)
 
   }
  // @tailrec
