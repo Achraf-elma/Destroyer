@@ -1,32 +1,41 @@
 package scala
 import scala.annotation.tailrec
 import scala.humanPlayer._
+import scala.GameTools._
 
-case class Grid(cells : Array[Array[Char]] ) {
+case class Grid(cells : Array[Array[String]] ) {
 
   def getCells = cells
 
   override def toString: String = {
-    Console.BLUE + getCells.map(_.mkString).mkString("\n") + Console.YELLOW
+    var row = List("A ", "B ", "C ", "D ", "E ","F ", "G ","H ", "I", "J")
+    var column = List("0 ", "1 ", "2 ", "3 ","4 ","5 ","6 ","7 ","8 ", "9 ")
+    var s = column.mkString("│")
+    "\n" + s + "\n" + getCells.map(_ mkString "│").mkString("\n")
   }
 
-
-
-
-   // Grid.checkShipSpace(askShip(2, "Destroyer"), grid)
+  // Grid.checkShipSpace(askShip(2, "Destroyer"), grid)
  //   Nil :+  askShip(Ship.carrier, grid) :+ askShip(Ship.cruiser, grid)
     // :+ askShip(3, "Cruiser", grid) :+ askShip(4, "BattleShip", grid) :+ askShip(5, "Carrier"), grid)
 
     //  askShip(typesList.head)
 
-
   def shootAt(row: Int, column: Int): Grid = {
     var newCells = getCells
-    newCells(row)(column) = 'X'
-    print(this.toString)
-   // print(newCells.map(_.mkString).mkString("\n"))
-    this.copy(cells = newCells)
+    newCells(row)(column) = "XX"
+    // print(this.toString)
 
+    this.copy(cells = newCells)
+  }
+
+  def markAt(row: Int, column: Int, hit : Boolean): Grid = {
+    var newCells = getCells
+    hit match {
+      case true =>  newCells(row)(column) = "XX"
+      case false =>  newCells(row)(column) = "MM"
+    }
+    print(this.toString + "\n\n")
+    this.copy(cells = newCells)
   }
 
   /**
@@ -37,16 +46,15 @@ case class Grid(cells : Array[Array[Char]] ) {
     */
   def isOccupied(row: Int, column: Int): Option[(Int, Int)] = {
     cells(row)(column) match {
-      case '▓' => println("\n\nTOUCHED")
+      case "▓▓" => println("\n\nTOUCHED")
         Some((row, column))
-      case 'o' => println("\n\nMISSED")
+      case "░░" => println("\n\nMISSED")
         None
-      case 'X' => println("\n\nALREADY HIT")
+      case "XX" => println("\n\nALREADY HIT")
         None
       case _ => println("\n\nMISSED")
         None
     }
-
 
 
   }
@@ -62,7 +70,7 @@ object Grid{
     */
   def initGrid(rows: Int, cols: Int): Grid = {
     val cells = Array.ofDim[Char](rows, cols)
-    val newCells = cells.map(c => c.map(z => 'o'))
+    val newCells = cells.map(c => c.map(z => "░░"))
     Grid(newCells)
   }
 
@@ -82,13 +90,13 @@ object Grid{
   @tailrec
   def askShip(typeShip : TypeShip, grid : Grid) : (Ship, Grid) = {
     println("Type : " + typeShip.name + " ||| Size : " + typeShip.size)
-    var row = askIntEntry("Row")
-    var column = askIntEntry("Column")
+    var row = askIntEntry("Row - number of the head of the ship (number between 0 and 9) :")
+    var column = askIntEntry("Column -  number of the head of the ship (number between 0 and 9) :")
     var isVertical = askIfVertical()
     var freeSpace = Ship.checkFreeSpaceAt(row, column, typeShip.size, isVertical, grid)
     if (freeSpace) {
-      println("PLACE")
-      val s = Ship(row,column,typeShip, isVertical, Nil)
+      println("SHIP OK")
+      val s = Ship(row,column,typeShip, isVertical, 0)
       val g = Grid.placeShip(s, grid)
       (s,g)
     } else {

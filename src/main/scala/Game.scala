@@ -19,6 +19,8 @@ object Game extends App {
 
     var gridEmpty1 = initGrid(10,10)
     var gridEmpty2 = initGrid(10,10)
+    var gridEmpty3 = initGrid(10,10)
+    var gridEmpty4 = initGrid(10,10)
 
 
 
@@ -31,18 +33,18 @@ object Game extends App {
     var tupleShipGrid = askShips(Nil,gridEmpty1, Ship.typesShip)
     var shipsPlayer1 = tupleShipGrid._1
     var gridPlayer1 = tupleShipGrid._2
-    var player1 = humanPlayer("Achraf", shipsPlayer1 , Nil, gridPlayer1)
+    var player1 = humanPlayer("Achraf", shipsPlayer1 , Nil, gridPlayer1, gridEmpty3)
     print(player1.ships)
 
     println("Player Two type your ships's coordinates")
     var tupleShipGrid2 = askShips(Nil,gridEmpty2, Ship.typesShip)
     var shipsPlayer2 = tupleShipGrid2._1
     var gridPlayer2 = tupleShipGrid2._2
-    var player2 = humanPlayer("Tom", shipsPlayer2 , Nil, gridPlayer2)
+    var player2 = humanPlayer("Tom", shipsPlayer2 , Nil, gridPlayer2, gridEmpty4)
     print(player2.ships)
 
 
-    attackPhase(player1, player2)
+    var playerWinner = attackPhase(player1, player2)
 
 
     // var player2 = humanPlayer("Tom", Grid.askShips() , Nil)

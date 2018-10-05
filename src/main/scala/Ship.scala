@@ -2,7 +2,7 @@ package scala
 import scala.annotation.tailrec
 
 case class TypeShip(size : Int, name : String)
-case class Ship(row : Int, column : Int, typeShip : TypeShip, isVertical : Boolean, hitCells : List[(Int, Int)])
+case class Ship(row : Int, column : Int, typeShip : TypeShip, isVertical : Boolean, numberOfHitCells : Int)
 
 object Ship {
 
@@ -11,9 +11,8 @@ object Ship {
   val cruiser = TypeShip(3, "Cruiser")
   val submarine = TypeShip(3, "Submarine")
   val destroyer = TypeShip(2, "Destroyer")
-
-  val typesShip = Nil :+ carrier
-  // :+ battleship :+ cruiser :+ submarine :+ destroyer
+  val typesShip = Nil :+ destroyer :+ battleship
+  // :+ cruiser :+ submarine :+ destroyer
 
 
   /**
@@ -27,24 +26,22 @@ object Ship {
     */
   @tailrec
   def checkFreeSpaceAt(row : Int, column : Int, size : Int, isVertical : Boolean, grid : Grid) : Boolean = {
-   println("row : " + row + " column : " + column )
-
 
         if(row > 9 || row < 0 || column > 9 || column < 0) {
             println("Cells out of grid")
             false
           } else {
-          if (grid.getCells(row)(column) == '▓') {
-            println("Cells unavailable")
-            false
+          if (grid.getCells(row)(column) ==  "▓▓" ) {
+                println("Cells unavailable")
+                false
           } else {
             if (size == 1) {
-              true
+                true
             } else {
-              isVertical match {
-                case true => checkFreeSpaceAt(row + 1, column, size - 1, true, grid)
-                case false => checkFreeSpaceAt(row, column + 1, size - 1, false, grid)
-              }
+                isVertical match {
+                  case true => checkFreeSpaceAt(row + 1, column, size - 1, true, grid)
+                  case false => checkFreeSpaceAt(row, column + 1, size - 1, false, grid)
+                }
             }
           }
         }
@@ -62,9 +59,8 @@ object Ship {
     */
   @tailrec
   def placeShipAt(row : Int, column : Int, size : Int,  isVertical : Boolean, grid : Grid ) : Grid = {
-    println("row : " + row + " column : " + column )
     var newCells = grid.getCells
-    newCells(row)(column) = '▓'
+    newCells(row)(column) = "▓▓"
 
      if(size == 1) {
        print(grid.toString)
@@ -79,6 +75,82 @@ object Ship {
 
 
     }
+
+
+  /**
+    *
+    * @param x
+    * @param y
+    * @param row
+    * @param column
+    * @param isVertical
+    * @param size
+    * @return true if (x,y) are coordinates of the ship (row,column, isVertical, size)
+    */
+
+  @tailrec
+  def shipHit(x: Int , y : Int ,row : Int, column : Int, isVertical : Boolean, size : Int): Boolean ={
+    if(size == 0){
+      false
+    } else {
+      if(x ==  row && y == column){
+        true
+      } else {
+        isVertical match {
+          case true => shipHit(x,y,row +1 , column, true, size - 1)
+          case false => shipHit(x,y,row , column + 1, true, size - 1)
+        }
+      }
+
+
+    }
+
+  }
+
+  def shipMatch(x : Int, y : Int, ships : List[Ship]) : List[Ship] = {
+    if (ships.isEmpty) {
+      Nil
+    } else {
+
+      var ship = ships.head
+      if (shipHit(x, y, ship.row, ship.column, ship.isVertical, ship.typeShip.size)) {
+        // ship touched
+        var newShip = ship.copy(numberOfHitCells = ship.numberOfHitCells + 1)
+        if (newShip.numberOfHitCells == newShip.typeShip.size) {
+          //ship sunk
+          println("SHIP SUNK")
+          ships.tail
+        } else {
+          newShip :: ships.tail
+        }
+      }
+      else {
+        ship :: shipMatch(x, y, ships.tail)
+      }
+    }
+  }
+  /**  def shipMatch(row : Int, column : Int, ships : List[Ship]) : List[Ship] = {
+      var ship = ships.head
+      if(ship.row == row && ship.column == column ) {
+        // ship touched
+        var newShip = ship.copy(row = 99, column = 99, numberOfHitCells = ship.numberOfHitCells + 1)
+        if (newShip.numberOfHitCells == newShip.typeShip.size) {
+          //ship sunk
+          println("SHIP SUNK")
+          ships.tail
+        } else {
+          newShip :: ships.tail
+        }
+
+      }
+        else {
+          ship :: shipMatch(row, column, ships.tail)
+        }
+
+      }**/
+
+
+
 
 
   }
