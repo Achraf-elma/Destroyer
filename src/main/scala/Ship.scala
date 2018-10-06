@@ -1,7 +1,21 @@
 package scala
 import scala.annotation.tailrec
 
+/**
+  * typeShip class records the size and the name of the type ship
+  * @param size
+  * @param name
+  */
 case class TypeShip(size : Int, name : String)
+
+/**
+  *
+  * @param row
+  * @param column
+  * @param typeShip
+  * @param isVertical
+  * @param numberOfHitCells
+  */
 case class Ship(row : Int, column : Int, typeShip : TypeShip, isVertical : Boolean, numberOfHitCells : Int)
 
 object Ship {
@@ -11,7 +25,7 @@ object Ship {
   val cruiser = TypeShip(3, "Cruiser")
   val submarine = TypeShip(3, "Submarine")
   val destroyer = TypeShip(2, "Destroyer")
-  val typesShip = Nil :+ destroyer :+ battleship
+  val typesShip = Nil :+ destroyer
   // :+ cruiser :+ submarine :+ destroyer
 
 
@@ -31,7 +45,7 @@ object Ship {
             println("Cells out of grid")
             false
           } else {
-          if (grid.getCells(row)(column) ==  "▓▓" ) {
+          if (grid.getCells(row)(column) ==  Grid.SHIPCELL ) {
                 println("Cells unavailable")
                 false
           } else {
@@ -47,7 +61,6 @@ object Ship {
         }
     }
 
-
   /**
     *
     * @param row
@@ -60,7 +73,7 @@ object Ship {
   @tailrec
   def placeShipAt(row : Int, column : Int, size : Int,  isVertical : Boolean, grid : Grid ) : Grid = {
     var newCells = grid.getCells
-    newCells(row)(column) = "▓▓"
+    newCells(row)(column) = Grid.SHIPCELL
 
      if(size == 1) {
        print(grid.toString)
@@ -76,7 +89,6 @@ object Ship {
 
     }
 
-
   /**
     *
     * @param x
@@ -89,7 +101,7 @@ object Ship {
     */
 
   @tailrec
-  def shipHit(x: Int , y : Int ,row : Int, column : Int, isVertical : Boolean, size : Int): Boolean ={
+  def shipHit(x: Int , y : Int ,row : Int, column : Int, isVertical : Boolean, size : Int): Boolean = {
     if(size == 0){
       false
     } else {
@@ -107,11 +119,17 @@ object Ship {
 
   }
 
+  /**
+    *
+    * @param x
+    * @param y
+    * @param ships
+    * @return a new List of Ships. It update the ship that had been hit by incrementing his nuberOfHitCells
+    */
   def shipMatch(x : Int, y : Int, ships : List[Ship]) : List[Ship] = {
     if (ships.isEmpty) {
       Nil
     } else {
-
       var ship = ships.head
       if (shipHit(x, y, ship.row, ship.column, ship.isVertical, ship.typeShip.size)) {
         // ship touched
@@ -129,27 +147,6 @@ object Ship {
       }
     }
   }
-  /**  def shipMatch(row : Int, column : Int, ships : List[Ship]) : List[Ship] = {
-      var ship = ships.head
-      if(ship.row == row && ship.column == column ) {
-        // ship touched
-        var newShip = ship.copy(row = 99, column = 99, numberOfHitCells = ship.numberOfHitCells + 1)
-        if (newShip.numberOfHitCells == newShip.typeShip.size) {
-          //ship sunk
-          println("SHIP SUNK")
-          ships.tail
-        } else {
-          newShip :: ships.tail
-        }
-
-      }
-        else {
-          ship :: shipMatch(row, column, ships.tail)
-        }
-
-      }**/
-
-
 
 
 

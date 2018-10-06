@@ -1,6 +1,15 @@
 package scala
+
+import scala.annotation.tailrec
+
 object GameTools{
 
+  /**
+    *
+    * @param s
+    * @return an Int that conforms the pattern
+    */
+  @tailrec
   def askIntEntry(s : String): Int = {
     println("[ENTER NUMBER]  " +  s)
     var entry = scala.io.StdIn.readLine()
@@ -12,6 +21,11 @@ object GameTools{
     }
   }
 
+  /**
+    *
+    * @return true if the player want his ship vertical, false otherwise
+    */
+  @tailrec
   def askIfVertical(): Boolean = {
     println("[ENTER LETTER] Position of your ship, type letter v for Vertical or type letter h for Horizontal ")
     var entry = scala.io.StdIn.readLine()
@@ -22,7 +36,10 @@ object GameTools{
     }
   }
 
-  def attackPhase(p1 : humanPlayer, p2 : humanPlayer) :  humanPlayer = {
+
+
+  @tailrec
+  def attackPhase(p1 : humanPlayer, p2 : humanPlayer) :  Player = {
     if(p1.ships.isEmpty){
       println(p2.name + " WINNNNS !")
       p2
