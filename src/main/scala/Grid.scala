@@ -105,7 +105,55 @@ object Grid{
     }
   }
 
-  /**
+  @tailrec
+  def askShipsAI(ships : List[Ship], grid : Grid, typeList : List[TypeShip]) : (List[Ship], Grid) = {
+    println("\n||" + typeList.length + " ships left to place " + "||")
+    if(typeList.isEmpty){
+      (ships, grid)
+    } else {
+      var sg = askShipAI(typeList.head, grid, Nil)
+      var newShips = ships :+ sg._1
+      var newGrid = sg._2
+      askShipsAI(newShips, newGrid, typeList.tail)
+    }
+  }
+
+  def entryAI() : (Int, Int, Boolean) = {
+    val random = scala.util.Random
+    val row = random.nextInt(9)
+    val column = random.nextInt(9)
+    val isVertical = random.nextInt(2) match {
+    case 0 =>  true
+    case 1 => false
+  }
+    (row, column,isVertical)
+  }
+
+  def askShipAI(typeShip : TypeShip, grid : Grid, cellsAlreadyTried : List[(Int,Int, Boolean)]) : (Ship, Grid) = {
+
+    val tupleEntry = entryAI()
+    val row = tupleEntry._1
+    val column = tupleEntry._2
+    val isVertical = tupleEntry._3
+
+    if(cellsAlreadyTried.contains(tupleEntry) ) {
+      askShipAI(typeShip, grid, cellsAlreadyTried)
+    } else {
+      var freeSpace = Ship.checkFreeSpaceAt(row, column, typeShip.size, isVertical, grid)
+      if (freeSpace) {
+        println("SHIP OK")
+        val s = Ship(row,column,typeShip, isVertical, 0)
+        val g = Grid.placeShip(s, grid)
+        (s,g)
+      } else {
+        println("CELLS NOT AVAILABLE")
+        askShipAI(typeShip, grid, tupleEntry :: cellsAlreadyTried )
+      }
+    }
+
+
+  }
+    /**
     *
     * @param typeShip
     * @param grid

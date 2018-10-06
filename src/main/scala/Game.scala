@@ -46,7 +46,7 @@ object Game extends App {
 
 
     println("IA ONE")
-    var tupleShipGrid2 = askShips(Nil,gridEmpty2, Ship.typesShip)
+    var tupleShipGrid2 = askShipsAI(Nil,gridEmpty2, Ship.typesShip)
     var shipsPlayer2 = tupleShipGrid2._1
     var gridPlayer2 = tupleShipGrid2._2
 

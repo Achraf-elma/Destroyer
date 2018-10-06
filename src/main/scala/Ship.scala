@@ -25,8 +25,7 @@ object Ship {
   val cruiser = TypeShip(3, "Cruiser")
   val submarine = TypeShip(3, "Submarine")
   val destroyer = TypeShip(2, "Destroyer")
-  val typesShip = Nil :+ destroyer
-  // :+ cruiser :+ submarine :+ destroyer
+  val typesShip = Nil :+ destroyer :+ submarine :+ cruiser :+ battleship :+ carrier
 
 
   /**
