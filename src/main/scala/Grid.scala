@@ -20,7 +20,7 @@ case class Grid(cells : Array[Array[String]] ) {
     */
   def shootAt(row: Int, column: Int): Grid = {
     var newCells = getCells
-    newCells(row)(column) = "XX"
+    newCells(row)(column) = Grid.SHIPHIT
     this.copy(cells = newCells)
   }
 

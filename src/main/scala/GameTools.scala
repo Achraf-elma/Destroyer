@@ -36,10 +36,18 @@ object GameTools{
     }
   }
 
+  /**
+  def pre_attackphase(p1 : Player, p2 : Player) : Player = {
+    p1.getClass match {
+      case humanPlayer => attackPhase(p1,p2)
+    }
+
+  } **/
 
 
   @tailrec
-  def attackPhase(p1 : humanPlayer, p2 : humanPlayer) :  Player = {
+  def attackPhase(p1 : Player, p2 : Player) :  Player = {
+
     if(p1.ships.isEmpty){
       println(p2.name + " WINNNNS !")
       p2
@@ -54,10 +62,15 @@ object GameTools{
       println("\n Grid of your already touched cells : ")
       println(p1.gridOfAlreadyTouchedCells.toString)
 
+
+      /**
       println("Row attack ? ")
       val rowAttack = askIntEntry("ROW of attack")
       println("Column attack ? ")
-      val columnAttack = askIntEntry("COLUMN of attack ")
+      val columnAttack = askIntEntry("COLUMN of attack ") **/
+      val tupleShootCoordinates = p1.askShootCoordinates()
+      val rowAttack = tupleShootCoordinates._1
+      val columnAttack = tupleShootCoordinates._2
 
       val occupiedCase = p2.gridOfShips.isOccupied(rowAttack, columnAttack)
 
@@ -65,8 +78,16 @@ object GameTools{
         case None =>
           println("Failed")
           val newgridOfAlreadyTouchedCellsP1 = p1.gridOfAlreadyTouchedCells.markAt(rowAttack,columnAttack, false)
-          val newPlayer1 = p1.copy(gridOfAlreadyTouchedCells = newgridOfAlreadyTouchedCellsP1)
+          val newPlayer1 = p1.copyGridATC(gridOfAlreadyTouchedCells = newgridOfAlreadyTouchedCellsP1)
           attackPhase(p2, newPlayer1)
+         /** if(p1.getClass == humanPlayer.getClass){
+              println("[ENTER] Type any touch to start " + p2.name + " turn : ")
+              val entry = scala.io.StdIn.readLine()
+              attackPhase(p2, newPlayer1)
+          } else {
+               attackPhase(p2, newPlayer1)
+          } **/
+
 
         case Some((r, c)) =>
 
@@ -74,8 +95,8 @@ object GameTools{
           val newGridOfAlreadyTouchedCellsP1 = p1.gridOfAlreadyTouchedCells.markAt(r,c, true)
           val newShips2 = Ship.shipMatch(r, c, p2.ships)
 
-          val newPlayer2 = p2.copy(gridOfShips = newGridOfShipP2, ships = newShips2)
-          val newPlayer1 = p1.copy(gridOfAlreadyTouchedCells = newGridOfAlreadyTouchedCellsP1)
+          val newPlayer2 = p2.copyShipsGridShips(ships = newShips2, gridOfShips = newGridOfShipP2)
+          val newPlayer1 = p1.copyGridATC(gridOfAlreadyTouchedCells = newGridOfAlreadyTouchedCellsP1)
       //    print(newPlayer1, newPlayer2)
           attackPhase(newPlayer2, newPlayer1)
       }
