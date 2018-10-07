@@ -1,56 +1,82 @@
 package scala
+import players.Player
+
 import scala.annotation.tailrec
 import scala.io.StdIn._
 import scala.Grid._
+import players._
 import scala.GameTools._
 
 case class GameState(
-                      var countShipSunk1 : Int,
-                      var countShipSunk2 : Int
-                    )
+                      val numberOfGames : Int,
+                      val winsPlayer1 : Int,
+                      val winsPlayer2 : Int
+                    ) {
+  override def toString: String = {
+    "\nNumber Of Games played : " + numberOfGames + "\n Wins player 1 : " + winsPlayer1 + "\n Wins player 2 : " + winsPlayer2
+  }
+}
 
 object Game extends App {
 
-  var game = new GameState(0,0)
+  var game = new GameState(0, 0, 0)
   //  var random = scala.util.Random
 
-  askForMode(game)
+
+  fightIAvsIA(game)
+ //  askForMode(game)
+
+
+  def fightIAvsIA(counter: GameState): Unit = {
+    if (counter.numberOfGames == 2) {
+      println(counter.toString)
+    } else {
+      val player1 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+      val player2 = levelTwo(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+      val winner = game(player1, player2)
+      winner.name match {
+        case "Level 1" => fightIAvsIA(counter.copy(numberOfGames = counter.numberOfGames +1 , winsPlayer1 = counter.winsPlayer1 + 1))
+        case "Level 2" => fightIAvsIA(counter.copy(numberOfGames = counter.numberOfGames + 1, winsPlayer2 = counter.winsPlayer1 + 1))
+      }
+    }
+  }
 
   def askForMode(state: GameState): Unit = {
     println("=====================\nDESTROYER\n=====================")
     println("Choose your mode \n")
     println(" (A) PVP \n (B) BEGINNER \n (C) MEDIUM \n (D) HARD \n")
     readLine() match {
-      case "A" => val player1 = humanPlayer("Achraf", Nil, initGrid(10,10), initGrid(10,10) )
-                  val player2 = humanPlayer("Marion", Nil, initGrid(10,10), initGrid(10,10) )
-                  game(player1,player2)
-      case "B" => val player1 = humanPlayer("Achraf", Nil, initGrid(10,10), initGrid(10,10) )
-                  val player2 = levelOne(Nil, initGrid(10,10), initGrid(10,10))
-                  game(player1,player2)
-      case "C" =>  val player1 = humanPlayer("Achraf", Nil, initGrid(10,10), initGrid(10,10) )
-                   val player2 = levelOne(Nil, initGrid(10,10), initGrid(10,10))
-                   game(player1,player2)
-      case "D" =>  val player1 = humanPlayer("Achraf", Nil, initGrid(10,10), initGrid(10,10) )
-                    val player2 = levelOne(Nil, initGrid(10,10), initGrid(10,10))
-                    game(player1,player2)
-      case _  => println("Please enter A, B , C or D")
-                  askForMode(state)
+      case "A" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+        val player2 = humanPlayer("Marion", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+        game(player1, player2)
+      case "B" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+        val player2 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+        game(player1, player2)
+      case "C" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+        val player2 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+        game(player1, player2)
+      case "D" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+        val player2 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+        game(player1, player2)
+      case _ => println("Please enter A, B , C or D")
+        askForMode(state)
     }
   }
 
-   def game(p1 : Player, p2: Player): Unit = {
+  def game(p1: Player, p2: Player): Player = {
 
-     println("Player" + p1.name + " type your ships's coordinates")
-     var player1 = p1.askShips(Nil,p1.gridOfShips, Ship.typesShip) // return a new player with ships updated, grid update, empty grid mark.
+    println("Player" + p1.name + " type your ships's coordinates")
+    var player1 = p1.askShips(Nil, p1.gridOfShips, Ship.typesShip) // return a new player with ships updated, grid update, empty grid mark.
 
-     println("Player" + p2.name + " type your ships's coordinates")
-     var player2 = p2.askShips(Nil,p2.gridOfShips, Ship.typesShip) // return a new player with ships updated, grid update, empty grid mark
+    println("Player" + p2.name + " type your ships's coordinates")
+    var player2 = p2.askShips(Nil, p2.gridOfShips, Ship.typesShip) // return a new player with ships updated, grid update, empty grid mark
 
-     val winner = attackPhase(player1,player2)
+    val winner = attackPhase(player1, player2)
+    winner
 
-   }
+  }
 
-
+}
 
 
 
@@ -70,7 +96,7 @@ object Game extends App {
     var tupleShipGrid = askShips(Nil,gridEmpty1, Ship.typesShip)
     var shipsPlayer1 = tupleShipGrid._1
     var gridPlayer1 = tupleShipGrid._2
-    var player1 = humanPlayer("Achraf", shipsPlayer1 , gridPlayer1, gridEmpty3)
+    var player1 = players.humanPlayer("Achraf", shipsPlayer1 , gridPlayer1, gridEmpty3)
 
 
     println("IA ONE")
@@ -96,14 +122,14 @@ object Game extends App {
     var tupleShipGrid = askShips(Nil,gridEmpty1, Ship.typesShip)
     var shipsPlayer1 = tupleShipGrid._1
     var gridPlayer1 = tupleShipGrid._2
-    var player1 = humanPlayer("Achraf", shipsPlayer1 , gridPlayer1, gridEmpty3)
+    var player1 = players.humanPlayer("Achraf", shipsPlayer1 , gridPlayer1, gridEmpty3)
     //print(player1.ships)
 
     println("Player Two type your ships's coordinates")
     var tupleShipGrid2 = askShips(Nil,gridEmpty2, Ship.typesShip)
     var shipsPlayer2 = tupleShipGrid2._1
     var gridPlayer2 = tupleShipGrid2._2
-   // var player2 = humanPlayer("Tom", shipsPlayer2 , gridPlayer2, gridEmpty4)
+   // var player2 = players.humanPlayer("Tom", shipsPlayer2 , gridPlayer2, gridEmpty4)
     //print(player2.ships)
 
      var ai1 = levelOne(shipsPlayer2, gridPlayer2, gridEmpty4)
@@ -113,4 +139,3 @@ object Game extends App {
   }
 
   **/
-}

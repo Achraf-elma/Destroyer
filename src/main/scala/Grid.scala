@@ -1,6 +1,5 @@
 package scala
 import scala.annotation.tailrec
-import scala.humanPlayer._
 import scala.GameTools._
 
 case class Grid(cells : Array[Array[String]] ) {
@@ -14,6 +13,7 @@ case class Grid(cells : Array[Array[String]] ) {
 
   /**
     * shootAT
+    *
     * @param row
     * @param column
     * @return a new grid and mark the touched cell
@@ -31,13 +31,13 @@ case class Grid(cells : Array[Array[String]] ) {
     * @param hit
     * @return a new grid and mark matching if the cell has been hit or not
     */
-  def markAt(row: Int, column: Int, hit : Boolean): Grid = {
+  def markAt(row: Int, column: Int, hit: Boolean): Grid = {
     var newCells = getCells
     hit match {
-      case true =>  newCells(row)(column) = Grid.SHIPHIT
-      case false =>  newCells(row)(column) = Grid.MISSEDATTACK
+      case true => newCells(row)(column) = Grid.SHIPHIT
+      case false => newCells(row)(column) = Grid.MISSEDATTACK
     }
-   //  print(this.toString + "\n\n")
+    //  print(this.toString + "\n\n")
     this.copy(cells = newCells)
   }
 
@@ -55,12 +55,14 @@ case class Grid(cells : Array[Array[String]] ) {
         Some((row, column))
       case Grid.SEACELL => println("\n\nMISSED")
         None
-      case Grid.SHIPHIT  => println("\n\nALREADY HIT")
-        None
+      case Grid.SHIPHIT => println("\n\nALREADY HIT")
+        Some((-1,-1))
       case _ => println("\n\nMISSED")
         None
     }
   }
+
+
 }
 
 object Grid {
@@ -92,6 +94,27 @@ object Grid {
     */
   def placeShip(ship : Ship, grid: Grid) : Grid = Ship.placeShipAt(ship.row,ship.column,ship.typeShip.size,ship.isVertical, grid)
 
+  def listOfAlreadyTouchedCells(cells: Array[Array[String]], row: Int, column: Int): List[(Int, Int)] = {
+    // parcours chasque case en prenant l'index (x,y) qui contient grid.SHIPTHIT
+    // listOfAlreadyTouchedCells(x. :: l)
+    //  val gridTC = grid.cells.head
+    //val list = grid.cells.map(x => x.map(y => grid.cells.indexOf())
 
+    if (cells.isEmpty) {
+      Nil
+    } else {
+      if (column == 10) {
+        listOfAlreadyTouchedCells(cells.tail, row + 1, column)
+      } else {
+        val columnList = cells.head
+        if (columnList(column) == Grid.SHIPHIT) {
+          (row, column) :: listOfAlreadyTouchedCells(cells, row, column + 1)
+        } else {
+          (row, column) :: listOfAlreadyTouchedCells(cells, row, column + 1)
+        }
+      }
+    }
+
+  }
 
 }

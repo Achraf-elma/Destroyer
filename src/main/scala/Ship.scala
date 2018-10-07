@@ -26,7 +26,7 @@ object Ship {
   val submarine = TypeShip(3, "Submarine")
   val destroyer = TypeShip(2, "Destroyer")
   val typesShip = Nil :+ destroyer
-  //:+ submarine :+ cruiser :+ battleship :+ carrier
+  // :+ cruiser :+ battleship :+ carrier
 
 
   /**
@@ -128,6 +128,7 @@ object Ship {
     */
   def shipMatch(x : Int, y : Int, ships : List[Ship]) : List[Ship] = {
     if (ships.isEmpty) {
+      println("FLEET SUNK")
       Nil
     } else {
       var ship = ships.head
