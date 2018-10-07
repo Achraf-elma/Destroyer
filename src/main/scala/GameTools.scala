@@ -4,37 +4,6 @@ import scala.annotation.tailrec
 
 object GameTools{
 
-  /**
-    *
-    * @param s
-    * @return an Int that conforms the pattern
-    */
-  @tailrec
-  def askIntEntry(s : String): Int = {
-    println("[ENTER NUMBER]  " +  s)
-    var entry = scala.io.StdIn.readLine()
-    val reg = "(^[0-9]$)".r
-    entry match {
-      case reg(p) => p.toInt
-      case _ => println("Please enter a number between 0 and 9")
-        askIntEntry(s)
-    }
-  }
-
-  /**
-    *
-    * @return true if the player want his ship vertical, false otherwise
-    */
-  @tailrec
-  def askIfVertical(): Boolean = {
-    println("[ENTER LETTER] Position of your ship, type letter v for Vertical or type letter h for Horizontal ")
-    var entry = scala.io.StdIn.readLine()
-    entry match{
-      case "v" => true
-      case "h" => false
-      case _ => askIfVertical()
-    }
-  }
 
   /**
   def pre_attackphase(p1 : Player, p2 : Player) : Player = {
@@ -68,7 +37,7 @@ object GameTools{
       val rowAttack = askIntEntry("ROW of attack")
       println("Column attack ? ")
       val columnAttack = askIntEntry("COLUMN of attack ") **/
-      val tupleShootCoordinates = p1.askShootCoordinates()
+      val tupleShootCoordinates = p1.entryShootCoordinates()
       val rowAttack = tupleShootCoordinates._1
       val columnAttack = tupleShootCoordinates._2
 

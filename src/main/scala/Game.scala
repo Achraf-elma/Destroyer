@@ -16,19 +16,47 @@ object Game extends App {
 
   askForMode(game)
 
-  def askForMode(state: GameState): Unit ={
+  def askForMode(state: GameState): Unit = {
     println("=====================\nDESTROYER\n=====================")
     println("Choose your mode \n")
     println(" (A) PVP \n (B) BEGINNER \n (C) MEDIUM \n (D) HARD \n")
     readLine() match {
-      case "A" => playerVplayerloop(state)
-      case "B" => playerVai(state)
-      case "C" => playerVai(state)
-      case "D" => playerVai(state)
+      case "A" => val player1 = humanPlayer("Achraf", Nil, initGrid(10,10), initGrid(10,10) )
+                  val player2 = humanPlayer("Marion", Nil, initGrid(10,10), initGrid(10,10) )
+                  game(player1,player2)
+      case "B" => val player1 = humanPlayer("Achraf", Nil, initGrid(10,10), initGrid(10,10) )
+                  val player2 = levelOne(Nil, initGrid(10,10), initGrid(10,10))
+                  game(player1,player2)
+      case "C" =>  val player1 = humanPlayer("Achraf", Nil, initGrid(10,10), initGrid(10,10) )
+                   val player2 = levelOne(Nil, initGrid(10,10), initGrid(10,10))
+                   game(player1,player2)
+      case "D" =>  val player1 = humanPlayer("Achraf", Nil, initGrid(10,10), initGrid(10,10) )
+                    val player2 = levelOne(Nil, initGrid(10,10), initGrid(10,10))
+                    game(player1,player2)
       case _  => println("Please enter A, B , C or D")
                   askForMode(state)
     }
   }
+
+   def game(p1 : Player, p2: Player): Unit = {
+
+     println("Player" + p1.name + " type your ships's coordinates")
+     var player1 = p1.askShips(Nil,p1.gridOfShips, Ship.typesShip) // return a new player with ships updated, grid update, empty grid mark.
+
+     println("Player" + p2.name + " type your ships's coordinates")
+     var player2 = p2.askShips(Nil,p2.gridOfShips, Ship.typesShip) // return a new player with ships updated, grid update, empty grid mark
+
+     val winner = attackPhase(player1,player2)
+
+   }
+
+
+
+
+
+
+
+/**
 
   def playerVai(state: GameState): Unit ={
     var gridEmpty1 = initGrid(10,10)
@@ -84,4 +112,5 @@ object Game extends App {
 
   }
 
+  **/
 }
