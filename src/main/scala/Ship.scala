@@ -25,8 +25,7 @@ object Ship {
   val cruiser = TypeShip(3, "Cruiser")
   val submarine = TypeShip(3, "Submarine")
   val destroyer = TypeShip(2, "Destroyer")
-  val typesShip = Nil :+ destroyer :+ submarine
-  //:+ cruiser :+ battleship :+ carrier
+  val typesShip = Nil :+ destroyer :+ submarine :+ cruiser :+ battleship :+ carrier
 
 
   /**
@@ -109,8 +108,8 @@ object Ship {
         true
       } else {
         isVertical match {
-          case true => shipHit(x,y,row +1 , column, true, size - 1)
-          case false => shipHit(x,y,row , column + 1, true, size - 1)
+          case true => shipHit(x,y,row + 1 , column, true, size - 1)
+          case false => shipHit(x,y,row , column + 1, false, size - 1)
         }
       }
 
@@ -128,15 +127,17 @@ object Ship {
     */
   def shipMatch(x : Int, y : Int, ships : List[Ship]) : List[Ship] = {
     if (ships.isEmpty) {
-      Nil
+       Nil
     } else {
       var ship = ships.head
+
       if (shipHit(x, y, ship.row, ship.column, ship.isVertical, ship.typeShip.size)) {
         // ship touched
         var newShip = ship.copy(numberOfHitCells = ship.numberOfHitCells + 1)
         if (newShip.numberOfHitCells == newShip.typeShip.size) {
           //ship sunk
           println("SHIP SUNK")
+          println( ships.tail)
           ships.tail
         } else {
           newShip :: ships.tail

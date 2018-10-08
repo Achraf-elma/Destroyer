@@ -1,6 +1,7 @@
 package players
 
 import scala.annotation.tailrec
+import scala.util.Random
 
 
 case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouchedCells : Grid,  goodShots: List[(Int, Int)]) extends Player {
@@ -20,18 +21,18 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
 
 
 
-  def randomCoordinates(seed : scala.util.Random) : (Int, Int) = {
-    val x = seed.nextInt(10)
-    val y = seed.nextInt(10)
+  def randomCoordinates : (Int, Int) = {
+    val x = (new Random).nextInt(10)
+    val y = (new Random).nextInt(10)
     (x, y)
   }
 
 
-  def entryShootCoordinates(seed : scala.util.Random) : (Int, Int) = {
-    val random = randomCoordinates(seed)
+  def entryShootCoordinates : (Int, Int) = {
+    val random = randomCoordinates
     val grid = this.gridOfAlreadyTouchedCells.cells
     if(Grid.listOfAlreadyTouchedCells(grid,9,9).contains(random)) { //already hit
-      entryShootCoordinates(seed)
+      entryShootCoordinates
     } else {
       random
     }
@@ -85,7 +86,7 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
 
   }
 
-  def message(s: Any): Unit = println(s)
+  def message(s: Any): Unit = ()
 
   def copyGridATC(gridATC : Grid, goodShots : List[(Int, Int)]): Player ={
     this.copy(gridOfAlreadyTouchedCells = gridATC, goodShots = goodShots)

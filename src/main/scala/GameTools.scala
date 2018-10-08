@@ -38,7 +38,7 @@ object GameTools{
   }
 
   @tailrec
-  def attackPhase(p1 : Player, p2 : Player, seed : scala.util.Random) :  Player = {
+  def attackPhase(p1 : Player, p2 : Player) :  Player = {
 
     if(p1.ships.isEmpty){
       informationMessage(p2.name + " WINNNNS !")
@@ -56,7 +56,9 @@ object GameTools{
       p1.message("\n Grid of your already touched cells : ")
       p1.message(p1.gridOfAlreadyTouchedCells.toString)
 
-      val tupleShootCoordinates = p1.entryShootCoordinates(seed)
+      //println(p1.ships)
+
+      val tupleShootCoordinates = p1.entryShootCoordinates
       val rowAttack = tupleShootCoordinates._1
       val columnAttack = tupleShootCoordinates._2
 
@@ -67,7 +69,7 @@ object GameTools{
           p1.message("Failed")
           val newgridOfAlreadyTouchedCellsP1 = p1.gridOfAlreadyTouchedCells.markAt(rowAttack,columnAttack, false)
           val newPlayer1 = p1.copyGridATC(gridOfAlreadyTouchedCells = newgridOfAlreadyTouchedCellsP1, p1.goodShots)
-          attackPhase(p2, newPlayer1, seed)
+          attackPhase(p2, newPlayer1)
          /** if(p1.getClass == players.humanPlayer.getClass){
               println("[ENTER] Type any touch to start " + p2.name + " turn : ")
               val entry = scala.io.StdIn.readLine()
@@ -77,7 +79,7 @@ object GameTools{
           } **/
 
         case Some((-1,-1)) => p1.message("Already Hit")
-                              attackPhase(p2, p1, seed) // case occupied with a ship parcel already shot
+                              attackPhase(p2, p1) // case occupied with a ship parcel already shot
         case Some((row, column)) => // case occupied with a ship parcel
           p1.message("Hit !")
           val newGridOfShipP2 = p2.gridOfShips.shootAt(row, column)
@@ -88,7 +90,7 @@ object GameTools{
           val newPlayer2 = p2.copyShipsGridShips(ships = newShips2, gridOfShips = newGridOfShipP2)
           val newPlayer1 = p1.copyGridATC(gridOfAlreadyTouchedCells = newGridOfAlreadyTouchedCellsP1, goodShots = newGoodShoots)
       //    print(newPlayer1, newPlayer2)
-          attackPhase(newPlayer2, newPlayer1, seed)
+          attackPhase(newPlayer2, newPlayer1)
       }
     }
   }

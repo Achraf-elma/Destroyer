@@ -105,13 +105,13 @@ object Grid {
       Nil
     } else {
       if (column == 9) {
-        listOfAlreadyTouchedCells(cells.tail, row + 1, column)
+        listOfAlreadyTouchedCells(cells.tail, row + 1, 0)
       } else {
         val columnList = cells.head
         if (columnList(column) == Grid.SHIPHIT ||  columnList(column) == Grid.MISSEDATTACK) {
           (row, column) :: listOfAlreadyTouchedCells(cells, row, column + 1)
         } else {
-          (row, column) :: listOfAlreadyTouchedCells(cells, row, column + 1)
+          listOfAlreadyTouchedCells(cells, row, column + 1)
         }
       }
     }

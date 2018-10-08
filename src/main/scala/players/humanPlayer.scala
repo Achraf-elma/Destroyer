@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 
 case class humanPlayer(name : String, ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouchedCells : Grid, goodShots: List[(Int, Int)]) extends Player {
 
-  def entryShootCoordinates(seed : scala.util.Random) : (Int, Int) = {
+  def entryShootCoordinates : (Int, Int) = {
     print("\n")
     val rowAttack = humanPlayer.askRowEntry("ROW of attack")
     print("\n")

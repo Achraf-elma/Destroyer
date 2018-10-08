@@ -1,6 +1,7 @@
 package players
 
 import scala.annotation.tailrec
+import scala.util.Random
 
 
 case class levelThree(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouchedCells : Grid,  goodShots: List[(Int, Int)]) extends Player {
@@ -20,29 +21,32 @@ case class levelThree(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouc
 
 
 
-  def randomCoordinates(seed : scala.util.Random) : (Int, Int) = {
-    val x = seed.nextInt(10)
-    val y = seed.nextInt(10)
+  def randomCoordinates : (Int, Int) = {
+    val x = (new Random).nextInt(10)
+    val y = (new Random).nextInt(10)
     (x, y)
   }
 
 
-  def rand(seed : scala.util.Random) : (Int, Int) = {
-    val random = randomCoordinates(seed)
+  def rand : (Int, Int) = {
+    val random = randomCoordinates
     val grid = this.gridOfAlreadyTouchedCells.cells
     if(Grid.listOfAlreadyTouchedCells(grid,9,9).contains(random)) { //already hit
-      entryShootCoordinates(seed)
+      entryShootCoordinates
     } else {
       random
     }
   }
 
+  def chooseCoordinates(surrondingCells : List[(Int, Int)]): Unit ={
+    
+  }
 
-  def entryShootCoordinates(seed : scala.util.Random) : (Int, Int) = {
+  def entryShootCoordinates : (Int, Int) = {
     val random = scala.util.Random
 
     if(this.goodShots.isEmpty){
-      rand(seed)
+      rand
     } else {
       val lastShot = this.goodShots.head
 
@@ -63,9 +67,9 @@ case class levelThree(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouc
       val (row,column) = result
 
       if(row > 9 || row < 0 || column > 9 || column < 0){
-        rand(seed)
+        rand
       } else if(Grid.listOfAlreadyTouchedCells(this.gridOfAlreadyTouchedCells.cells,9,9).contains(row,column)) { //already hit
-        entryShootCoordinates(seed)
+        entryShootCoordinates
       } else {
         (row, column)
       }
