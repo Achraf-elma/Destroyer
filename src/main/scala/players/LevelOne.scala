@@ -4,9 +4,9 @@ import scala.annotation.tailrec
 import scala.util.Random
 
 
-case class levelOne(name : String, ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouchedCells : Grid,  goodShots: List[(Int, Int)]) extends Player {
+case class levelOne(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouchedCells : Grid,  goodShots: List[(Int, Int)]) extends Player {
 
-
+  val name: String = "Level 1"
 
   def entryShipCoordinates() : (Int, Int, Boolean) = {
     val random = scala.util.Random

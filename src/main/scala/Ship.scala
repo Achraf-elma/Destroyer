@@ -40,12 +40,12 @@ object Ship {
   @tailrec
   def checkFreeSpaceAt(row : Int, column : Int, size : Int, isVertical : Boolean, grid : Grid) : Boolean = {
 
-        if(row > 9 || row < 0 || column > 9 || column < 0) {
-            println("Cells out of grid")
+        if(row > 9 || row < 0 || column > 9 || column < 0) { //"Cells out of grid"
+         //   println("Cells out of grid")
             false
           } else {
-          if (grid.getCells(row)(column) ==  Grid.SHIPCELL ) {
-                println("Cells unavailable")
+          if (grid.getCells(row)(column) ==  Grid.SHIPCELL ) { // "Cells unavailable"
+               // println("Cells unavailable")
                 false
           } else {
             if (size == 1) {
