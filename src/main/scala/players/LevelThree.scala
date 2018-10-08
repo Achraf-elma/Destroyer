@@ -27,25 +27,35 @@ case class levelThree(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouc
     (x, y)
   }
 
+  def checkIfAlreadyTouched(coordinates : (Int,Int)): Boolean = Grid.listOfAlreadyTouchedCells(this.gridOfAlreadyTouchedCells.cells,0,0).contains(coordinates)
 
   def rand : (Int, Int) = {
     val random = randomCoordinates
-    val grid = this.gridOfAlreadyTouchedCells.cells
-    if(Grid.listOfAlreadyTouchedCells(grid,9,9).contains(random)) { //already hit
+    if(checkIfAlreadyTouched(random)) { //already hit
       entryShootCoordinates
     } else {
       random
     }
   }
 
-  def chooseCoordinates(surrondingCells : List[(Int, Int)]): Unit ={
-    
+  def chooseTargetFrom(surrondingCells : List[(Int, Int)]) : (Int, Int) ={
+    if(surrondingCells.isEmpty){
+      rand
+    } else {
+      val target = surrondingCells.head
+      val (row, column) = target
+      if(checkIfAlreadyTouched(target) | row > 9 || row < 0 || column > 9 || column < 0){
+        chooseTargetFrom(surrondingCells.tail)
+      } else {
+        target
+      }
+    }
   }
 
   def entryShootCoordinates : (Int, Int) = {
     val random = scala.util.Random
 
-    if(this.goodShots.isEmpty){
+    if (this.goodShots.isEmpty) {
       rand
     } else {
       val lastShot = this.goodShots.head
@@ -57,22 +67,7 @@ case class levelThree(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouc
         (lastShot._1, lastShot._2 - 1)
       )
 
-      val result = random.nextInt(4) match {
-        case 0 =>  surrondingCells(0) // en bas
-        case 1 =>  surrondingCells(1)  // en haut
-        case 2 =>  surrondingCells(2)  // a droite
-        case 3 =>  surrondingCells(3)  // a gauche
-      }
-
-      val (row,column) = result
-
-      if(row > 9 || row < 0 || column > 9 || column < 0){
-        rand
-      } else if(Grid.listOfAlreadyTouchedCells(this.gridOfAlreadyTouchedCells.cells,9,9).contains(row,column)) { //already hit
-        entryShootCoordinates
-      } else {
-        (row, column)
-      }
+      chooseTargetFrom(surrondingCells)
     }
   }
     /** var cells = gridOfAlreadyTouchedCells.cells

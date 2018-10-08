@@ -29,16 +29,16 @@ object Game extends App {
 //GameTools.writeCSV("HEY")
 
   def fightIAvsIA_1(counter: GameState): Unit = {
-    if (counter.numberOfGames == 2) {
+    if (counter.numberOfGames == 100) {
       println(counter.toString)
     } else {
 
-      val player1 = levelOne("o,",Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+      val player1 = levelTwo(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
       val player2 = levelThree(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
       val winner = game(player1, player2)
 
       winner.name match {
-        case "Level 1" => fightIAvsIA_1(counter.copy(numberOfGames = counter.numberOfGames + 1 , winsPlayer1 = counter.winsPlayer1 + 1))
+        case "Level 2" => fightIAvsIA_1(counter.copy(numberOfGames = counter.numberOfGames + 1 , winsPlayer1 = counter.winsPlayer1 + 1))
         case "Level 3" => fightIAvsIA_1(counter.copy(numberOfGames = counter.numberOfGames + 1, winsPlayer2 = counter.winsPlayer2 + 1))
       }
     }
@@ -77,7 +77,8 @@ object Game extends App {
       case "D" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
                    val player2 = levelThree(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
                   game(player1, player2)
-      case "E" =>   fightIAvsIA_2(state)
+      case "E" =>   fightIAvsIA_1(state)
+      case "F" =>   fightIAvsIA_2(state)
       case _ => println("\n [Warning] Please enter A, B , C , D or E")
         askForMode(state)
     }

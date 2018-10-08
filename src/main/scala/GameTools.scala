@@ -63,7 +63,7 @@ object GameTools{
       val columnAttack = tupleShootCoordinates._2
 
       val occupiedCase = p2.gridOfShips.isOccupied(rowAttack, columnAttack)
-
+    //  println(Console.RED + "Je suis le joueur " + p1.name + " j'attaque : " + occupiedCase + Console.RESET)
       occupiedCase match {
         case None => // case not occupied
           p1.message("Failed")

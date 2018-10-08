@@ -31,7 +31,7 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
   def entryShootCoordinates : (Int, Int) = {
     val random = randomCoordinates
     val grid = this.gridOfAlreadyTouchedCells.cells
-    if(Grid.listOfAlreadyTouchedCells(grid,9,9).contains(random)) { //already hit
+    if(Grid.listOfAlreadyTouchedCells(grid,0,0).contains(random)) { //already hit
       entryShootCoordinates
     } else {
       random

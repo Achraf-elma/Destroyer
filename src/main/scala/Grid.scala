@@ -93,8 +93,8 @@ object Grid {
     * @return an update grid with the ship marked in it
     */
   def placeShip(ship : Ship, grid: Grid) : Grid = Ship.placeShipAt(ship.row,ship.column,ship.typeShip.size,ship.isVertical, grid)
-
-  // init with (cells, 10,10)
+/**
+  // init with (cells, 0,0)
   def listOfAlreadyTouchedCells(cells: Array[Array[String]], row: Int, column: Int): List[(Int, Int)] = {
     // parcours chasque case en prenant l'index (x,y) qui contient grid.SHIPTHIT
     // listOfAlreadyTouchedCells(x. :: l)
@@ -117,5 +117,27 @@ object Grid {
     }
 
   }
+**/
+  // init with (cells, 0,0)
+  def listOfAlreadyTouchedCells(cells: Array[Array[String]], row : Int, column: Int): List[(Int, Int)] = {
+    // parcours chasque case en prenant l'index (x,y) qui contient grid.SHIPTHIT
+    // listOfAlreadyTouchedCells(x. :: l)
+    //  val gridTC = grid.cells.head
+    //val list = grid.cells.map(x => x.map(y => grid.cells.indexOf())
+    if(row == 10){
+      Nil
+    } else {
+      if (column == 10) {
+        listOfAlreadyTouchedCells(cells, row + 1, 0)
+      } else {
+        if (cells(row)(column) == Grid.SHIPHIT || cells(row)(column) == Grid.MISSEDATTACK) {
+          (row, column) :: listOfAlreadyTouchedCells(cells, row, column + 1)
+        } else {
+          listOfAlreadyTouchedCells(cells, row, column + 1)
+        }
+      }
 
+
+    }
+  }
 }
