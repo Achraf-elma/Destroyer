@@ -20,14 +20,11 @@ case class GameState(
 object Game extends App {
 
   var game = new GameState(0, 0, 0)
-  //  var random = scala.util.Random
+
+  fightIAvsIA_1(game)
 
 
-  fightIAvsIA(game)
- //  askForMode(game)
-
-
-  def fightIAvsIA(counter: GameState): Unit = {
+  def fightIAvsIA_1(counter: GameState): Unit = {
     if (counter.numberOfGames == 2) {
       println(counter.toString)
     } else {
@@ -35,8 +32,8 @@ object Game extends App {
       val player2 = levelTwo(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
       val winner = game(player1, player2)
       winner.name match {
-        case "Level 1" => fightIAvsIA(counter.copy(numberOfGames = counter.numberOfGames +1 , winsPlayer1 = counter.winsPlayer1 + 1))
-        case "Level 2" => fightIAvsIA(counter.copy(numberOfGames = counter.numberOfGames + 1, winsPlayer2 = counter.winsPlayer1 + 1))
+        case "Level 1" => fightIAvsIA_1(counter.copy(numberOfGames = counter.numberOfGames + 1 , winsPlayer1 = counter.winsPlayer1 + 1))
+        case "Level 2" => fightIAvsIA_1(counter.copy(numberOfGames = counter.numberOfGames + 1, winsPlayer2 = counter.winsPlayer2 + 1))
       }
     }
   }
@@ -44,31 +41,32 @@ object Game extends App {
   def askForMode(state: GameState): Unit = {
     println("=====================\nDESTROYER\n=====================")
     println("Choose your mode \n")
-    println(" (A) PVP \n (B) BEGINNER \n (C) MEDIUM \n (D) HARD \n")
+    println(" (A) PVP \n (B) BEGINNER \n (C) MEDIUM \n (D) HARD \n (E) ia 1 vs ia 2 \n")
     readLine() match {
       case "A" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-        val player2 = humanPlayer("Marion", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-        game(player1, player2)
+                  val player2 = humanPlayer("Marion", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+                   game(player1, player2)
       case "B" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-        val player2 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-        game(player1, player2)
+                  val player2 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+                  game(player1, player2)
       case "C" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-        val player2 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-        game(player1, player2)
+                   val player2 = levelTwo(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+                   game(player1, player2)
       case "D" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-        val player2 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-        game(player1, player2)
-      case _ => println("Please enter A, B , C or D")
+                   val player2 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+                  game(player1, player2)
+      case "E" =>   fightIAvsIA_1(game)
+      case _ => println("\n [Warning] Please enter A, B , C , D or E")
         askForMode(state)
     }
   }
 
   def game(p1: Player, p2: Player): Player = {
 
-    println("Player" + p1.name + " type your ships's coordinates")
+    informationMessage("Player " + p1.name + " type your ships's coordinates")
     var player1 = p1.askShips(Nil, p1.gridOfShips, Ship.typesShip) // return a new player with ships updated, grid update, empty grid mark.
 
-    println("Player" + p2.name + " type your ships's coordinates")
+    informationMessage("Player" + p2.name + " type your ships's coordinates")
     var player2 = p2.askShips(Nil, p2.gridOfShips, Ship.typesShip) // return a new player with ships updated, grid update, empty grid mark
 
     val winner = attackPhase(player1, player2)

@@ -9,8 +9,8 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
 
   def entryShipCoordinates() : (Int, Int, Boolean) = {
     val random = scala.util.Random
-    val row = random.nextInt(9)
-    val column = random.nextInt(9)
+    val row = random.nextInt(10)
+    val column = random.nextInt(10)
     val isVertical = random.nextInt(2) match {
       case 0 =>  true
       case 1 => false
@@ -21,26 +21,36 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
 
 
   def entryShootCoordinates() : (Int, Int) = {
+    val random = scala.util.Random
+
     if(this.goodShots.isEmpty){
-      val random = scala.util.Random
-      (random.nextInt(10), random.nextInt(10))
+      val (x,y) = (random.nextInt(10), random.nextInt(10))
+      println(Console.RED + "ROW" + x + "COLUMN" + y  )
+      (x,y)
     } else {
       val lastShot = this.goodShots.head
-      val random = scala.util.Random
-      val result = random.nextInt(4) match {
+
+      val result = random.nextInt(5) match {
         case 0 => (lastShot._1 + 1, lastShot._2) // en bas
         case 1 => (lastShot._1 - 1, lastShot._2) // en haut
         case 2 => (lastShot._1, lastShot._2 + 1) // a droite
-        case 3 => (lastShot._1, lastShot._2 - 1)
-        case _ => (0,0 )// a gauche
+        case 3 => (lastShot._1, lastShot._2 - 1) // a gauche
+        case _ => (random.nextInt(10), random.nextInt(10))
       }
 
-      val reg1 = "(^[0-9]$)".r
-      val reg2 = "(^[0-9]$)".r
-      println(result)
-      (-20, 0).productIterator.map(x => if(x > 9 || x < 0){ } )
-      (0,0)
+      val (row,column) = result
+
+      if(row > 9 || row < 0 || column > 9 || column < 0){
+        entryShootCoordinates()
+      } else if(Grid.listOfAlreadyTouchedCells(this.gridOfAlreadyTouchedCells.cells,10,10).contains(row,column)) { //already hit
+              entryShootCoordinates()
+          } else {
+              (row, column)
+            }
+
+      }
     }
+
 
 
     /** var cells = gridOfAlreadyTouchedCells.cells
@@ -53,10 +63,9 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
       *}
       * */
 
-  }
+
   @tailrec
   final def askShips(ships : List[Ship], grid : Grid, typeList : List[TypeShip]) : Player = {
-    println("\n||" + typeList.length + " ships left to place " + "||")
     if(typeList.isEmpty){
       (ships, grid)
       this.copy(ships = ships, gridOfShips = grid)
@@ -80,12 +89,10 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
     } else {
       var freeSpace = Ship.checkFreeSpaceAt(row, column, typeShip.size, isVertical, grid)
       if (freeSpace) {
-        println("SHIP OK")
         val s = Ship(row,column,typeShip, isVertical, 0)
         val g = Grid.placeShip(s, grid)
         (s,g)
       } else {
-        println("CELLS NOT AVAILABLE")
         askShip(typeShip, grid, tupleEntry :: cellsAlreadyTried )
       }
     }

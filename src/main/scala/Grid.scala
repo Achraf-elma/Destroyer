@@ -7,9 +7,13 @@ case class Grid(cells : Array[Array[String]] ) {
   def getCells = cells
 
   override def toString: String = {
-    var s = Grid.columnLabel.mkString("│")
-    "\n" + s + "\n" + getCells.map(_ mkString "│").mkString("\n")
+    val columnLabel = "▓▓" + Grid.columnLabel.mkString("│")
+    var grid = ""
+    var g = getCells.map(_ mkString "│")
+    Grid.rowLabel.map(x => grid = grid + x + g(Grid.rowLabel.indexOf(x)) + "\n")
+    "\n" + columnLabel + "\n" + grid
   }
+
 
   /**
     * shootAT
@@ -67,8 +71,8 @@ case class Grid(cells : Array[Array[String]] ) {
 
 object Grid {
 
-  val rowLabel = List("A ", "B ", "C ", "D ", "E ","F ", "G ","H ", "I", "J")
-  val columnLabel = List("0", "1", "2", "3","4","5","6","7","8", "9").map(x => "  " + x + " ")
+  val rowLabel = List("A ", "B ", "C ", "D ", "E ","F ", "G ","H ", "I ", "J ")
+  val columnLabel = List("1", "2", "3","4","5","6","7","8", "9", "10").map(x => "  " + x + " ")
   val SHIPCELL = Console.GREEN + "▓▓▓▓" + Console.RESET
   val SEACELL  = Console.BLUE + "░░░░" + Console.RESET
   val SHIPHIT =  Console.RED + "XXXX" + Console.RESET
@@ -94,6 +98,7 @@ object Grid {
     */
   def placeShip(ship : Ship, grid: Grid) : Grid = Ship.placeShipAt(ship.row,ship.column,ship.typeShip.size,ship.isVertical, grid)
 
+  // init with (cells, 10,10)
   def listOfAlreadyTouchedCells(cells: Array[Array[String]], row: Int, column: Int): List[(Int, Int)] = {
     // parcours chasque case en prenant l'index (x,y) qui contient grid.SHIPTHIT
     // listOfAlreadyTouchedCells(x. :: l)

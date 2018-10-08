@@ -25,7 +25,6 @@ case class levelOne(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
 
   @tailrec
   final def askShips(ships : List[Ship], grid : Grid, typeList : List[TypeShip]) : Player = {
-    println("\n||" + typeList.length + " ships left to place " + "||")
     if(typeList.isEmpty){
       (ships, grid)
       this.copy(ships = ships, gridOfShips = grid)
@@ -49,12 +48,10 @@ case class levelOne(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
     } else {
       var freeSpace = Ship.checkFreeSpaceAt(row, column, typeShip.size, isVertical, grid)
       if (freeSpace) {
-        println("SHIP OK")
         val s = Ship(row,column,typeShip, isVertical, 0)
         val g = Grid.placeShip(s, grid)
         (s,g)
       } else {
-        println("CELLS NOT AVAILABLE")
         askShip(typeShip, grid, tupleEntry :: cellsAlreadyTried )
       }
     }

@@ -16,18 +16,30 @@ object GameTools{
   } **/
 
 
+  def warningMessage(s : Any) : Unit = {
+    println(Console.RED + "[WARNING] : " + s + Console.RESET)
+  }
+
+  def entryMessage(s : Any) : Unit = {
+    println(Console.GREEN + "[ENTRY] : " + s + Console.RESET)
+  }
+
+  def informationMessage(s : Any) : Unit = {
+     println(Console.BOLD + s + Console.RESET)
+  }
+
   @tailrec
   def attackPhase(p1 : Player, p2 : Player) :  Player = {
 
     if(p1.ships.isEmpty){
-      println(p2.name + " WINNNNS !")
+      informationMessage(p2.name + " WINNNNS !")
       p2
     } else if(p2.ships.isEmpty){
-      println(p1.name + " WINNNNS !")
+      informationMessage(p1.name + " WINNNNS !")
       p1
     } else {
       // PLAYER 1 TURN TO ATTACK
-      println("PLAYER TURN : " + p1.name)
+      informationMessage("PLAYER TURN : " + p1.name)
       p1.message("\n[ATTACK] Player " + p1.name + " your turn to attack !! ")
 
       p1.message("\n Grid of your ships : ")

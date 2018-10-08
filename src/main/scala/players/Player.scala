@@ -1,6 +1,6 @@
 package players
 
-trait Player{
+trait Player {
 
   val name : String
   val ships : List[Ship]
