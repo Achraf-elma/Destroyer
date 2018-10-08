@@ -3,9 +3,9 @@ package players
 import scala.annotation.tailrec
 
 
-case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouchedCells : Grid,  goodShots: List[(Int, Int)]) extends Player {
+case class levelThree(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouchedCells : Grid,  goodShots: List[(Int, Int)]) extends Player {
 
-  val name: String = "Level 2"
+  val name: String = "Level 3"
 
   def entryShipCoordinates() : (Int, Int, Boolean) = {
     val random = scala.util.Random
@@ -27,7 +27,7 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
   }
 
 
-  def entryShootCoordinates(seed : scala.util.Random) : (Int, Int) = {
+  def rand(seed : scala.util.Random) : (Int, Int) = {
     val random = randomCoordinates(seed)
     val grid = this.gridOfAlreadyTouchedCells.cells
     if(Grid.listOfAlreadyTouchedCells(grid,9,9).contains(random)) { //already hit
@@ -38,8 +38,39 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
   }
 
 
+  def entryShootCoordinates(seed : scala.util.Random) : (Int, Int) = {
+    val random = scala.util.Random
 
+    if(this.goodShots.isEmpty){
+      rand(seed)
+    } else {
+      val lastShot = this.goodShots.head
 
+      val surrondingCells = List(
+        (lastShot._1 + 1, lastShot._2),
+        (lastShot._1 - 1, lastShot._2),
+        (lastShot._1, lastShot._2 + 1),
+        (lastShot._1, lastShot._2 - 1)
+      )
+
+      val result = random.nextInt(4) match {
+        case 0 =>  surrondingCells(0) // en bas
+        case 1 =>  surrondingCells(1)  // en haut
+        case 2 =>  surrondingCells(2)  // a droite
+        case 3 =>  surrondingCells(3)  // a gauche
+      }
+
+      val (row,column) = result
+
+      if(row > 9 || row < 0 || column > 9 || column < 0){
+        rand(seed)
+      } else if(Grid.listOfAlreadyTouchedCells(this.gridOfAlreadyTouchedCells.cells,9,9).contains(row,column)) { //already hit
+        entryShootCoordinates(seed)
+      } else {
+        (row, column)
+      }
+    }
+  }
     /** var cells = gridOfAlreadyTouchedCells.cells
       * var listCellsShot = Grid.listOfAlreadyTouchedCells(cells, 0, 0)
       * val random = scala.util.Random
@@ -85,7 +116,7 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
 
   }
 
-  def message(s: Any): Unit = println(s)
+  def message(s: Any): Unit = ()
 
   def copyGridATC(gridATC : Grid, goodShots : List[(Int, Int)]): Player ={
     this.copy(gridOfAlreadyTouchedCells = gridATC, goodShots = goodShots)

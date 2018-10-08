@@ -11,7 +11,7 @@ trait Player {
 
   def message(s : Any) : Unit
 
-  def entryShootCoordinates() : (Int, Int)
+  def entryShootCoordinates(seed : scala.util.Random) : (Int, Int)
   def entryShipCoordinates() : (Int, Int, Boolean)
 
 

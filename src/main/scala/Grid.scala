@@ -55,14 +55,10 @@ case class Grid(cells : Array[Array[String]] ) {
     */
   def isOccupied(row: Int, column: Int): Option[(Int, Int)] = {
     cells(row)(column) match {
-      case Grid.SHIPCELL => println("\n\nTOUCHED")
-        Some((row, column))
-      case Grid.SEACELL => println("\n\nMISSED")
-        None
-      case Grid.SHIPHIT => println("\n\nALREADY HIT")
-        Some((-1,-1))
-      case _ => println("\n\nMISSED")
-        None
+      case Grid.SHIPCELL => Some((row, column)) //TOUCHED
+      case Grid.SEACELL => None //Missed
+      case Grid.SHIPHIT => Some((-1,-1)) //Already hit
+      case _ => None //missed
     }
   }
 
@@ -108,11 +104,11 @@ object Grid {
     if (cells.isEmpty) {
       Nil
     } else {
-      if (column == 10) {
+      if (column == 9) {
         listOfAlreadyTouchedCells(cells.tail, row + 1, column)
       } else {
         val columnList = cells.head
-        if (columnList(column) == Grid.SHIPHIT) {
+        if (columnList(column) == Grid.SHIPHIT ||  columnList(column) == Grid.MISSEDATTACK) {
           (row, column) :: listOfAlreadyTouchedCells(cells, row, column + 1)
         } else {
           (row, column) :: listOfAlreadyTouchedCells(cells, row, column + 1)

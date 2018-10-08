@@ -18,15 +18,16 @@ case class levelOne(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
     (row, column,isVertical)
   }
 
-  def entryShootCoordinates() : (Int, Int) = {
-    val random = scala.util.Random
-    (random.nextInt(10), random.nextInt(10))
+  def entryShootCoordinates(seed : scala.util.Random) : (Int, Int) = {
+    val x = seed.nextInt(10)
+    val y = seed.nextInt(10)
+    (x, y)
   }
+
 
   @tailrec
   final def askShips(ships : List[Ship], grid : Grid, typeList : List[TypeShip]) : Player = {
     if(typeList.isEmpty){
-      (ships, grid)
       this.copy(ships = ships, gridOfShips = grid)
     } else {
       var sg = askShip(typeList.head, grid, Nil)
