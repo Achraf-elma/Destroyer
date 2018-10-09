@@ -6,6 +6,10 @@ case class Grid(cells : Array[Array[String]] ) {
 
   def getCells = cells
 
+  /**
+    *
+    * @return current grid
+    */
   override def toString: String = {
     val columnLabel = "▓▓" + Grid.columnLabel.mkString("│")
     var grid = ""
@@ -41,7 +45,6 @@ case class Grid(cells : Array[Array[String]] ) {
       case true => newCells(row)(column) = Grid.SHIPHIT
       case false => newCells(row)(column) = Grid.MISSEDATTACK
     }
-    //  print(this.toString + "\n\n")
     this.copy(cells = newCells)
   }
 
@@ -93,37 +96,18 @@ object Grid {
     * @return an update grid with the ship marked in it
     */
   def placeShip(ship : Ship, grid: Grid) : Grid = Ship.placeShipAt(ship.row,ship.column,ship.typeShip.size,ship.isVertical, grid)
-/**
-  // init with (cells, 0,0)
-  def listOfAlreadyTouchedCells(cells: Array[Array[String]], row: Int, column: Int): List[(Int, Int)] = {
-    // parcours chasque case en prenant l'index (x,y) qui contient grid.SHIPTHIT
-    // listOfAlreadyTouchedCells(x. :: l)
-    //  val gridTC = grid.cells.head
-    //val list = grid.cells.map(x => x.map(y => grid.cells.indexOf())
 
-    if (cells.isEmpty) {
-      Nil
-    } else {
-      if (column == 9) {
-        listOfAlreadyTouchedCells(cells.tail, row + 1, 0)
-      } else {
-        val columnList = cells.head
-        if (columnList(column) == Grid.SHIPHIT ||  columnList(column) == Grid.MISSEDATTACK) {
-          (row, column) :: listOfAlreadyTouchedCells(cells, row, column + 1)
-        } else {
-          listOfAlreadyTouchedCells(cells, row, column + 1)
-        }
-      }
-    }
-
-  }
-**/
-  // init with (cells, 0,0)
+  //
+  /**
+    *  run through all the grid to search hit cells
+    * init with (cells, 0,0)
+    * @param cells
+    * @param row
+    * @param column
+    * @return list of the hit cells of the grid
+    */
   def listOfAlreadyTouchedCells(cells: Array[Array[String]], row : Int, column: Int): List[(Int, Int)] = {
-    // parcours chasque case en prenant l'index (x,y) qui contient grid.SHIPTHIT
-    // listOfAlreadyTouchedCells(x. :: l)
-    //  val gridTC = grid.cells.head
-    //val list = grid.cells.map(x => x.map(y => grid.cells.indexOf())
+
     if(row == 10){
       Nil
     } else {
@@ -136,8 +120,6 @@ object Grid {
           listOfAlreadyTouchedCells(cells, row, column + 1)
         }
       }
-
-
     }
   }
 }

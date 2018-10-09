@@ -1,11 +1,12 @@
 package players
 import GameTools._
 import scala.annotation.tailrec
+import scala.util.Random
 
 
 case class humanPlayer(name : String, ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouchedCells : Grid, goodShots: List[(Int, Int)]) extends Player {
 
-  def entryShootCoordinates : (Int, Int) = {
+  def entryShootCoordinates(seed : Random) : (Int, Int) = {
     print("\n")
     val rowAttack = humanPlayer.askRowEntry("ROW of attack")
     print("\n")
@@ -135,11 +136,11 @@ object humanPlayer{
     */
   @tailrec
   def askIfVertical(): Boolean = {
-    entryMessage("Location of your ship : \n - (v) Vertical \n - (h) Horizontal ")
+    entryMessage("Location of your ship : \n - (V) Vertical \n - (H) Horizontal ")
     var entry = scala.io.StdIn.readLine()
     entry match{
-      case "v" => true
-      case "h" => false
+      case "V" => true
+      case "H" => false
       case _ => askIfVertical()
     }
   }

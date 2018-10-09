@@ -21,35 +21,22 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
 
 
 
-  def randomCoordinates : (Int, Int) = {
-    val x = (new Random).nextInt(10)
-    val y = (new Random).nextInt(10)
+  def randomCoordinates(seed : Random) : (Int, Int) = {
+    val x = seed.nextInt(10)
+    val y = seed.nextInt(10)
     (x, y)
   }
 
 
-  def entryShootCoordinates : (Int, Int) = {
-    val random = randomCoordinates
+  def entryShootCoordinates(seed : Random) : (Int, Int) = {
+    val random = randomCoordinates(seed)
     val grid = this.gridOfAlreadyTouchedCells.cells
     if(Grid.listOfAlreadyTouchedCells(grid,0,0).contains(random)) { //already hit
-      entryShootCoordinates
+      entryShootCoordinates(seed)
     } else {
       random
     }
   }
-
-
-
-
-    /** var cells = gridOfAlreadyTouchedCells.cells
-      * var listCellsShot = Grid.listOfAlreadyTouchedCells(cells, 0, 0)
-      * val random = scala.util.Random
-      * val randomIndex = random.nextInt(listCellsShot.length - 1)
-      **
-      *
-      *
-      *}
-      * */
 
 
   @tailrec
@@ -64,7 +51,8 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
     }
   }
 
-  def askShip(typeShip : TypeShip, grid : Grid, cellsAlreadyTried : List[(Int,Int, Boolean)]) : (Ship, Grid) = {
+  @tailrec
+final  def askShip(typeShip : TypeShip, grid : Grid, cellsAlreadyTried : List[(Int,Int, Boolean)]) : (Ship, Grid) = {
 
     val tupleEntry = entryShipCoordinates()
     val row = tupleEntry._1
@@ -96,39 +84,3 @@ case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
     this.copy(ships = ships, gridOfShips = gridOfShips)
   }
 }
-/**
-case class levelTwo(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouchedCells : Grid) extends Player {
-
-  val name: String = "level 2"
-
-  def askShootCoordinates() : (Int, Int) = {
-    val random = scala.util.Random
-    (random.nextInt(9), random.nextInt(9))
-  }
-
-  def copyGridATC(gridATC : Grid): Player ={
-    this.copy()
-  }
-
-  def copyShipsGridShips(ships : List[Ship], gridOfShips : Grid) : Player = {
-    this.copy(ships = ships, gridOfShips = gridOfShips)
-  }
-}
-
-case class levelThree(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouchedCells : Grid) extends Player {
-
-  val name: String = "level 3"
-
-  def askShootCoordinates() : (Int, Int) = {
-    val random = scala.util.Random
-    (random.nextInt(9), random.nextInt(9))
-  }
-
-  def copyGridATC(gridATC : Grid): Player ={
-    this.copy()
-  }
-
-  def copyShipsGridShips(ships : List[Ship], gridOfShips : Grid) : Player = {
-    this.copy(ships = ships, gridOfShips = gridOfShips)
-  }
-  **/

@@ -1,5 +1,7 @@
 package players
 
+import scala.util.Random
+
 trait Player {
 
   val name : String
@@ -11,7 +13,7 @@ trait Player {
 
   def message(s : Any) : Unit
 
-  def entryShootCoordinates : (Int, Int)
+  def entryShootCoordinates(seed : Random) : (Int, Int)
   def entryShipCoordinates() : (Int, Int, Boolean)
 
 
@@ -20,4 +22,14 @@ trait Player {
 
   def copyShipsGridShips(ships : List[Ship], gridOfShips : Grid) : Player
   def copyGridATC(gridOfAlreadyTouchedCells : Grid, goodShots : List[(Int, Int)]) : Player
+
+
+}
+
+object Player{
+  def randomCoordinates(seed : Random) : (Int, Int) = {
+    val x = seed.nextInt(10)
+    val y = seed.nextInt(10)
+    (x, y)
+  }
 }

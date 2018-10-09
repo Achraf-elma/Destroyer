@@ -5,17 +5,19 @@ import scala.annotation.tailrec
 import scala.io.StdIn._
 import scala.Grid._
 import players._
+
 import scala.GameTools._
+import scala.util.Random
 
 case class GameState(
                        numberOfGames : Int,
                       val winsPlayer1 : Int,
                       val winsPlayer2 : Int,
-                      var seed : scala.util.Random
-
                     ) {
   override def toString: String = {
-    "\nNumber Of Games played : " + numberOfGames + "\n Wins player 1 : " + winsPlayer1 + "\n Wins player 2 : " + winsPlayer2
+   "\nNumber Of Games played : " + numberOfGames + "\n Wins player 1 : " + winsPlayer1 + "\n Wins player 2 : " + winsPlayer2
+
+
   }
 }
 
@@ -23,39 +25,38 @@ object Game extends App {
 
   println("=====================\nDESTROYER\n=====================")
 
-  var seed = scala.util.Random
-  var game = new GameState(0, 0, 0, seed)
+  var seed = new Random
+  var state = new GameState(0, 0, 0)
 
   // fightIAvsIA_1(game)
-  askForMode(game)
+  askForMode(state, seed)
 //GameTools.writeCSV("HEY")
 
 
-  def askForMode(state: GameState): Unit = {
+  def askForMode(state : GameState,seed: Random): Unit = {
 
     println("Choose your mode \n")
-    println(" (A) PVP \n (B) BEGINNER \n (C) MEDIUM \n (D) HARD \n (E) AI 1 vs AI 2 \n (F) AI 2 vs ia 3 \n")
+    println(" (A) PVP \n (B) BEGINNER \n (C) MEDIUM \n (D) HARD \n (E) AI VS AI \n")
     readLine() match {
       case "A" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
                   val player2 = humanPlayer("Marion", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-                   game(player1, player2)
+                   game(player1, player2, seed)
       case "B" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
                   val player2 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-                  game(player1, player2)
+                  game(player1, player2, seed)
       case "C" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
                    val player2 = levelTwo(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-                   game(player1, player2)
+                   game(player1, player2, seed)
       case "D" => val player1 = humanPlayer("Achraf", Nil, initGrid(10, 10), initGrid(10, 10), Nil)
                    val player2 = levelThree(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-                  game(player1, player2)
-      case "E" =>   fightAIvsAI_1(state)
-      case "F" =>   fightAIvsAI_2(state)
+                  game(player1, player2, seed)
+      case "E" =>   fightAI(state, seed)
       case _ => println("\n [Warning] Please enter A, B , C , D or E")
-        askForMode(state)
+        askForMode(state,seed)
     }
   }
 
-  def game(p1: Player, p2: Player): Player = {
+  def game(p1: Player, p2: Player, seed : Random): Player = {
 
     informationMessage("Player " + p1.name + " type your ships's coordinates")
     var player1 = p1.askShips(Nil, p1.gridOfShips, Ship.typesShip) // return a new player with ships updated, grid update, empty grid mark.
@@ -63,41 +64,123 @@ object Game extends App {
     informationMessage("Player" + p2.name + " type your ships's coordinates")
     var player2 = p2.askShips(Nil, p2.gridOfShips, Ship.typesShip) // return a new player with ships updated, grid update, empty grid mark
 
-    val winner = attackPhase(player1, player2)
+    val winner = attackPhase(player1, player2, seed)
     winner
 
   }
 
-  def fightAIvsAI_2(counter: GameState): Unit = {
+  def fightAIvsAI_2(counter: GameState, seed: Random): String = {
     if (counter.numberOfGames == 100) {
       println(counter.toString)
+      "AI Level Medium; " + counter.winsPlayer1 + "; Level Hard; " + counter.winsPlayer2 + "\n"
     } else {
 
       val player1 = levelTwo(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
       val player2 = levelThree(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
-      val winner = game(player1, player2)
+      val winner = game(player1, player2, seed )
 
       winner.name match {
-        case player1.name => fightAIvsAI_2(counter.copy(numberOfGames = counter.numberOfGames + 1 , winsPlayer1 = counter.winsPlayer1 + 1))
-        case player2.name => fightAIvsAI_2(counter.copy(numberOfGames = counter.numberOfGames + 1, winsPlayer2 = counter.winsPlayer2 + 1))
+        case player1.name => fightAIvsAI_2(counter.copy(numberOfGames = counter.numberOfGames + 1 , winsPlayer1 = counter.winsPlayer1 + 1), seed)
+        case player2.name => fightAIvsAI_2(counter.copy(numberOfGames = counter.numberOfGames + 1, winsPlayer2 = counter.winsPlayer2 + 1), seed)
       }
     }
   }
-
-  def fightAIvsAI_1(counter: GameState): Unit = {
+  def fightAIvsAI_3(counter: GameState, seed : Random ): String = {
     if (counter.numberOfGames == 100) {
       println(counter.toString)
+      "AI Level Beginner; " + counter.winsPlayer1 + "; Level Hard; " + counter.winsPlayer2 + "\n"
+    } else {
+
+      val player1 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+      val player2 = levelThree(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
+
+      val winner = game(player1, player2, seed)
+      winner.name match {
+        case  player1.name => fightAIvsAI_3(counter.copy(numberOfGames = counter.numberOfGames + 1 , winsPlayer1 = counter.winsPlayer1 + 1), seed)
+        case  player2.name => fightAIvsAI_3(counter.copy(numberOfGames = counter.numberOfGames + 1, winsPlayer2 = counter.winsPlayer2 + 1), seed)
+      }
+    }
+  }
+  def fightAIvsAI_1(counter: GameState, seed : Random ): String = {
+    if (counter.numberOfGames == 100) {
+      println(counter.toString)
+      "AI Level Beginner; " + counter.winsPlayer1 + "; Level Medium; " + counter.winsPlayer2 + "\n"
     } else {
 
       val player1 = levelOne(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
       val player2 = levelTwo(Nil, initGrid(10, 10), initGrid(10, 10), Nil)
 
-      val winner = game(player1, player2)
+      val winner = game(player1, player2, seed)
       winner.name match {
-        case  player1.name => fightAIvsAI_2(counter.copy(numberOfGames = counter.numberOfGames + 1 , winsPlayer1 = counter.winsPlayer1 + 1))
-        case  player2.name => fightAIvsAI_2(counter.copy(numberOfGames = counter.numberOfGames + 1, winsPlayer2 = counter.winsPlayer2 + 1))
+        case  player1.name => fightAIvsAI_1(counter.copy(numberOfGames = counter.numberOfGames + 1 , winsPlayer1 = counter.winsPlayer1 + 1), seed)
+        case  player2.name => fightAIvsAI_1(counter.copy(numberOfGames = counter.numberOfGames + 1, winsPlayer2 = counter.winsPlayer2 + 1), seed)
       }
     }
+  }
+
+  @tailrec
+  def attackPhase(p1 : Player, p2 : Player, seed : Random) :  Player = {
+
+    if(p1.ships.isEmpty){
+      informationMessage(p2.name + " WINNNNS !")
+      p2
+    } else if(p2.ships.isEmpty){
+      informationMessage(p1.name + " WINNNNS !")
+      p1
+    } else {
+      // PLAYER 1 TURN TO ATTACK
+      p1.message("PLAYER TURN : " + p1.name)
+      p1.message("\n[ATTACK] Player " + p1.name + " your turn to attack !! ")
+
+      p1.message("\n Grid of your ships : ")
+      p1.message(p1.gridOfShips.toString)
+      p1.message("\n Grid of your already touched cells : ")
+      p1.message(p1.gridOfAlreadyTouchedCells.toString)
+
+      //println(p1.ships)
+
+      val tupleShootCoordinates = p1.entryShootCoordinates(seed)
+      val rowAttack = tupleShootCoordinates._1
+      val columnAttack = tupleShootCoordinates._2
+
+      val occupiedCase = p2.gridOfShips.isOccupied(rowAttack, columnAttack)
+      //  println(Console.RED + "Je suis le joueur " + p1.name + " j'attaque : " + occupiedCase + Console.RESET)
+      occupiedCase match {
+        case None => // case not occupied
+          p1.message("Failed")
+          val newgridOfAlreadyTouchedCellsP1 = p1.gridOfAlreadyTouchedCells.markAt(rowAttack,columnAttack, false)
+          val newPlayer1 = p1.copyGridATC(gridOfAlreadyTouchedCells = newgridOfAlreadyTouchedCellsP1, p1.goodShots)
+          attackPhase(p2, newPlayer1, seed)
+        /** if(p1.getClass == players.humanPlayer.getClass){
+              println("[ENTER] Type any touch to start " + p2.name + " turn : ")
+              val entry = scala.io.StdIn.readLine()
+              attackPhase(p2, newPlayer1)
+          } else {
+               attackPhase(p2, newPlayer1)
+          } **/
+
+        case Some((-1,-1)) => p1.message("Already Hit")
+          attackPhase(p2, p1, seed) // case occupied with a ship parcel already shot
+        case Some((row, column)) => // case occupied with a ship parcel
+          p1.message("Hit !")
+          val newGridOfShipP2 = p2.gridOfShips.shootAt(row, column)
+          val newGridOfAlreadyTouchedCellsP1 = p1.gridOfAlreadyTouchedCells.markAt(row,column, true)
+          val newGoodShoots = (row, column) :: p1.goodShots
+          val newShips2 = Ship.shipMatch(row, column, p2.ships)
+
+          val newPlayer2 = p2.copyShipsGridShips(ships = newShips2, gridOfShips = newGridOfShipP2)
+          val newPlayer1 = p1.copyGridATC(gridOfAlreadyTouchedCells = newGridOfAlreadyTouchedCellsP1, goodShots = newGoodShoots)
+          //    print(newPlayer1, newPlayer2)
+          attackPhase(newPlayer2, newPlayer1, seed)
+      }
+    }
+  }
+
+
+  def fightAI(game : GameState, seed : Random ) : Unit = {
+    var s = "AI Name; score; AI Name2; score2\n"
+      s = s + fightAIvsAI_1(game, seed)  + fightAIvsAI_3(game, seed) + fightAIvsAI_2(game, seed)
+      writeCSV(s)
   }
 }
 

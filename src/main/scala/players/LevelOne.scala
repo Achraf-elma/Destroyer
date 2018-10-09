@@ -19,9 +19,9 @@ case class levelOne(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
     (row, column,isVertical)
   }
 
-  def entryShootCoordinates : (Int, Int) = {
-      val x = (new Random).nextInt(10)
-      val y = (new Random).nextInt(10)
+  def entryShootCoordinates(seed : Random) : (Int, Int) = {
+      val x = seed.nextInt(10)
+      val y = seed.nextInt(10)
       (x, y)
     }
 
@@ -38,7 +38,8 @@ case class levelOne(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouche
     }
   }
 
-  def askShip(typeShip : TypeShip, grid : Grid, cellsAlreadyTried : List[(Int,Int, Boolean)]) : (Ship, Grid) = {
+  @tailrec
+  final def askShip(typeShip : TypeShip, grid : Grid, cellsAlreadyTried : List[(Int,Int, Boolean)]) : (Ship, Grid) = {
 
     val tupleEntry = entryShipCoordinates()
     val row = tupleEntry._1

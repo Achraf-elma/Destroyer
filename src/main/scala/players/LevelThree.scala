@@ -21,42 +21,41 @@ case class levelThree(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouc
 
 
 
-  def randomCoordinates : (Int, Int) = {
-    val x = (new Random).nextInt(10)
-    val y = (new Random).nextInt(10)
+  def randomCoordinates(seed : Random) : (Int, Int) = {
+    val x = seed.nextInt(10)
+    val y = seed.nextInt(10)
     (x, y)
   }
 
   def checkIfAlreadyTouched(coordinates : (Int,Int)): Boolean = Grid.listOfAlreadyTouchedCells(this.gridOfAlreadyTouchedCells.cells,0,0).contains(coordinates)
 
-  def rand : (Int, Int) = {
-    val random = randomCoordinates
+  def rand(seed : Random) : (Int, Int) = {
+    val random = randomCoordinates(seed)
     if(checkIfAlreadyTouched(random)) { //already hit
-      entryShootCoordinates
+      entryShootCoordinates(seed)
     } else {
       random
     }
   }
 
-  def chooseTargetFrom(surrondingCells : List[(Int, Int)]) : (Int, Int) ={
+  @tailrec
+final  def chooseTargetFrom(surrondingCells : List[(Int, Int)], seed : Random) : (Int, Int) ={
     if(surrondingCells.isEmpty){
-      rand
+      rand(seed)
     } else {
       val target = surrondingCells.head
       val (row, column) = target
       if(checkIfAlreadyTouched(target) | row > 9 || row < 0 || column > 9 || column < 0){
-        chooseTargetFrom(surrondingCells.tail)
+        chooseTargetFrom(surrondingCells.tail, seed)
       } else {
         target
       }
     }
   }
 
-  def entryShootCoordinates : (Int, Int) = {
-    val random = scala.util.Random
-
+  def entryShootCoordinates(seed : Random) : (Int, Int) = {
     if (this.goodShots.isEmpty) {
-      rand
+      rand(seed)
     } else {
       val lastShot = this.goodShots.head
 
@@ -67,7 +66,7 @@ case class levelThree(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouc
         (lastShot._1, lastShot._2 - 1)
       )
 
-      chooseTargetFrom(surrondingCells)
+      chooseTargetFrom(surrondingCells, seed)
     }
   }
     /** var cells = gridOfAlreadyTouchedCells.cells
@@ -93,7 +92,8 @@ case class levelThree(ships : List[Ship],  gridOfShips : Grid, gridOfAlreadyTouc
     }
   }
 
-  def askShip(typeShip : TypeShip, grid : Grid, cellsAlreadyTried : List[(Int,Int, Boolean)]) : (Ship, Grid) = {
+  @tailrec
+final  def askShip(typeShip : TypeShip, grid : Grid, cellsAlreadyTried : List[(Int,Int, Boolean)]) : (Ship, Grid) = {
 
     val tupleEntry = entryShipCoordinates()
     val row = tupleEntry._1

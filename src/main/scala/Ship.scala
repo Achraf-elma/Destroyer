@@ -41,11 +41,9 @@ object Ship {
   def checkFreeSpaceAt(row : Int, column : Int, size : Int, isVertical : Boolean, grid : Grid) : Boolean = {
 
         if(row > 9 || row < 0 || column > 9 || column < 0) { //"Cells out of grid"
-         //   println("Cells out of grid")
             false
           } else {
           if (grid.getCells(row)(column) ==  Grid.SHIPCELL ) { // "Cells unavailable"
-               // println("Cells unavailable")
                 false
           } else {
             if (size == 1) {
@@ -76,7 +74,6 @@ object Ship {
 
      if(size == 1) {
        print(grid.toString)
-       // print(Console.BLUE + newCells.map(_.mkString).mkString("\n") + Console.YELLOW)
        grid.copy(cells = newCells)
       } else {
        isVertical match {
@@ -136,8 +133,6 @@ object Ship {
         var newShip = ship.copy(numberOfHitCells = ship.numberOfHitCells + 1)
         if (newShip.numberOfHitCells == newShip.typeShip.size) {
           //ship sunk
-          println("SHIP SUNK")
-          println( ships.tail)
           ships.tail
         } else {
           newShip :: ships.tail
