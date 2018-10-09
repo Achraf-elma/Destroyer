@@ -13,6 +13,6 @@ The game starts by asking you to choose between 5 modes
 - BEGINNER player Versus artificial intelligence “level one”
 - MEDIUM player Versus artificial intelligence “level two”
 - HARD player Versus artificial intelligence “level three”
-- AI VS AI watch 100 fights between those AI
+- AI VS AI watch 100 fights between those AI (UPDATE ai_proof.csv)
 
 Choose your mode by typing the proper character letter (range ‘A’ to ‘E’).
