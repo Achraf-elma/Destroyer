@@ -1,0 +1,18 @@
+INSTRUCTIONS
+Name of the Game : Destroyer				 Release version : 1.0
+Scala Version : 2.12 .7
+The project has been developed in a scala environnement (provided by IDE : IntelliJ
+IDEA 2018.2.4, JRE : 1.8.0_152)
+The game is ready to use.
+Use a sbt shell* and launch it with a run command
+	$sbt:Destroyer> run
+
+
+The game starts by asking you to choose between 5 modes
+- PVP player Versus player
+- BEGINNER player Versus artificial intelligence “level one”
+- MEDIUM player Versus artificial intelligence “level two”
+- HARD player Versus artificial intelligence “level three”
+- AI VS AI watch 100 fights between those AI
+
+Choose your mode by typing the proper character letter (range ‘A’ to ‘E’).

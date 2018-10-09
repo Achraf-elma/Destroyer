@@ -1,6 +1,0 @@
-[0m[[0m[31merror[0m] [0m[0m/home/h/Bureau/Destroyer/src/main/scala/Grid.scala:100:12: type mismatch;[0m
-[0m[[0m[31merror[0m] [0m[0m found   : Ship.type[0m
-[0m[[0m[31merror[0m] [0m[0m required: Ship[0m
-[0m[[0m[31merror[0m] [0m[0m      Some(Ship)[0m
-[0m[[0m[31merror[0m] [0m[0m           ^[0m
-[0m[[0m[31merror[0m] [0m[0mone error found[0m
